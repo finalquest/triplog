@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Adlery-Pro-Blockletter.ttf",
+      "sha1": "c8289f764577659fa835bf1802c223ba1cd5e5f9"
+    },
+    {
+      "path": "assets/fonts/Adlery-Pro.ttf",
+      "sha1": "998dddc06fe7ab4692bb7015cd018fb7eb21e413"
+    },
+    {
+      "path": "assets/fonts/Adlery-Swash.ttf",
+      "sha1": "05d6d11402cbf9c826c2c82a066e10aab604c389"
+    },
+    {
+      "path": "assets/fonts/Berton-Roman-trial.ttf",
+      "sha1": "2cb71ddd2a024b12477849c3021cd009793259cf"
+    },
+    {
+      "path": "assets/fonts/Berton-Voyage-trial.ttf",
+      "sha1": "6998d8029e9f344b53ac8ef6bd8b74191f917492"
+    },
+    {
+      "path": "assets/fonts/Blah blah bang.ttf",
+      "sha1": "c01cd3b7e4296651d6647c77bf28d2cee918d854"
+    },
+    {
+      "path": "assets/fonts/GochiHand-Regular.ttf",
+      "sha1": "802a966155b61c382029c3e9c5e857266cd5846e"
+    },
+    {
+      "path": "assets/fonts/Quikhand.ttf",
+      "sha1": "d44c0b8975bd4c21145c99255afbafd2939312f4"
+    }
+  ]
+}
