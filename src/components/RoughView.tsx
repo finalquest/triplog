@@ -24,27 +24,17 @@ const RoughView: React.FC<RoughViewProps> = ({ style, children, ...rest }) => {
   };
 
   return (
-    <View
-      style={[style]}
-      onLayout={onLayout}
-    >
-        <Svg
-          pointerEvents="none"
-          width={size.width}
-          height={size.height}
-          style={styles.container}
-        >
-          <Rough.Rectangle
-            x={styles.view.padding / 2}
-            y={styles.view.padding / 2}
-            width={size.width - styles.view.padding}
-            height={size.height - styles.view.padding}
-            {...rest}
-          />
-        </Svg>
-        <View style={styles.content}>
-            {children}
-        </View>
+    <View style={style} onLayout={onLayout}>
+      <Svg pointerEvents="none" width={size.width} height={size.height} style={styles.container}>
+        <Rough.Rectangle
+          x={styles.view.padding / 2}
+          y={styles.view.padding / 2}
+          width={size.width - styles.view.padding}
+          height={size.height - styles.view.padding}
+          {...rest}
+        />
+      </Svg>
+      <View style={styles.content}>{children}</View>
     </View>
   );
 };
