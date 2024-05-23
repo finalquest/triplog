@@ -1,10 +1,9 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import Rough from 'react-native-rough';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, LayoutRectangle } from 'react-native';
 import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
-import AddMore from '../../assets/imgs/add-sign-bold.svg';
-import { Svg } from 'react-native-svg';
+import RoughPlusButton from '../components/RoughAddButton';
+import AddModal from '../modals/AddModal';
 
 const styles = StyleSheet.create({
   flex: {
@@ -20,40 +19,57 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     marginVertical: 10,
   },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popover: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    overflow: 'hidden',
+    elevation: 10,
+    position: 'absolute',
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+  },
+  plusButton: { position: 'absolute', bottom: 20, right: 20, backgroundColor: 'transparent' },
+  headerView: { alignSelf: 'stretch', height: 100, justifyContent: 'center' },
+  content: { alignSelf: 'stretch', flex: 1 },
+  contentContainer: { height: '100%', justifyContent: 'center', alignSelf: 'stretch' },
+  button: { alignSelf: 'stretch', height: 80 },
 });
 
-const width = 100;
-const padding = 20;
+const PLUS_BUTTON_SIZE = 80;
 
 const Home = () => {
+  const [buttonPosition, setButtonPosition] = useState<LayoutRectangle | null>(null);
+
+  const handleButtonPress = (position: LayoutRectangle) => {
+    setButtonPosition(position);
+  };
+
+  const closeModal = () => {
+    setButtonPosition(null);
+  };
+
   return (
     <View style={styles.flex}>
-      <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={{ alignSelf: 'stretch', height: 100, justifyContent: 'center' }}>
+      <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.headerView}>
         <Text style={styles.font} numberOfLines={4}>
           {strings.home_box_title}
         </Text>
       </RoughView>
-      <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={{ alignSelf: 'stretch', flex: 1, justifyContent: 'center' }}>
-        <Text style={styles.font} numberOfLines={4}>
-          {strings.home_last_action}
-        </Text>
-        <AddMore width={50} height={50} strokeWidth={50} />
-        <Svg pointerEvents="none" width={width} height={width}>
-          <Rough.Circle
-            x={50}
-            y={width / 2}
-            diameter={width - padding}
-            hachureAngle={60}
-            hachureGap={5}
-            fillWeight={3}
-            stroke="black"
-            strokeWidth={5}
-            fill="gray"
-          />
-          <Rough.Line x1={padding} y1={width / 2} x2={width - padding} y2={width / 2} stroke="black" strokeWidth={5} />
-          <Rough.Line x1={width / 2} y1={padding} x2={width / 2} y2={width - padding} stroke="black" strokeWidth={5} />
-        </Svg>
+      <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.content}>
+        <View style={styles.contentContainer}>
+          <Text style={styles.font} numberOfLines={4}>
+            {strings.home_last_action}
+          </Text>
+        </View>
+        <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />
       </RoughView>
+      <AddModal visible={!!buttonPosition} position={buttonPosition} onRequestClose={closeModal} />
     </View>
   );
 };

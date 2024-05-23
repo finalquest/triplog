@@ -1,6 +1,6 @@
 // RoughButton.tsx
 import React, { useState } from 'react';
-import { TouchableOpacity, View, StyleSheet, LayoutChangeEvent, ViewStyle, TouchableOpacityProps, Text } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, LayoutChangeEvent, TouchableOpacityProps, Text } from 'react-native';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 
