@@ -4,6 +4,8 @@ import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
 import RoughPlusButton from '../components/RoughAddButton';
 import AddModal from '../modals/AddModal';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import CameraPreview from '../components/Camera';
 
 const styles = StyleSheet.create({
   flex: {
@@ -45,6 +47,7 @@ const PLUS_BUTTON_SIZE = 80;
 
 const Home = () => {
   const [buttonPosition, setButtonPosition] = useState<LayoutRectangle | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
 
   const handleButtonPress = (position: LayoutRectangle) => {
     setButtonPosition(position);
@@ -63,13 +66,29 @@ const Home = () => {
       </RoughView>
       <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.content}>
         <View style={styles.contentContainer}>
-          <Text style={styles.font} numberOfLines={4}>
-            {strings.home_last_action}
-          </Text>
+          {showCamera ? (
+            <CameraPreview
+              onClose={() => {
+                setShowCamera(false);
+              }}
+            />
+          ) : (
+            <Text style={styles.font} numberOfLines={4}>
+              {strings.home_last_action}
+            </Text>
+          )}
         </View>
-        <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />
+        {!showCamera && <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />}
       </RoughView>
-      <AddModal visible={!!buttonPosition} position={buttonPosition} onRequestClose={closeModal} />
+      <AddModal
+        visible={!!buttonPosition}
+        position={buttonPosition}
+        onRequestClose={closeModal}
+        onImage={() => {
+          setShowCamera(true);
+          closeModal();
+        }}
+      />
     </View>
   );
 };

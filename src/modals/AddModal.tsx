@@ -9,12 +9,13 @@ interface AddModalProps {
   visible: boolean;
   position: LayoutRectangle | null;
   onRequestClose: () => void;
+  onImage: () => void;
 }
 
 const PLUS_BUTTON_SIZE = 80;
 const { width } = Dimensions.get('window');
 
-const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose }) => {
+const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose, onImage }) => {
   if (!position) {
     return null;
   }
@@ -28,6 +29,7 @@ const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose }
           roughness={3}
           style={[styles.popover, { width: width / 2, left: position.x - width / 3 - PLUS_BUTTON_SIZE / 3, top: position.y - PLUS_BUTTON_SIZE / 3 }]}>
           <RoughButton
+            onPress={onImage}
             style={styles.button}
             fillWeight={3}
             strokeWidth={5}
