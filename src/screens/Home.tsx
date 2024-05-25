@@ -4,8 +4,7 @@ import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
 import RoughPlusButton from '../components/RoughAddButton';
 import AddModal from '../modals/AddModal';
-import { Camera, useCameraDevice } from 'react-native-vision-camera';
-import CameraPreview from '../components/Camera';
+import CameraPreview from '../components/camera/Camera';
 
 const styles = StyleSheet.create({
   flex: {

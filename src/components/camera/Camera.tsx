@@ -1,7 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Camera, useCameraDevice } from 'react-native-vision-camera'; // Assuming you are using react-native-vision-camera
-import RoughCircularButton from './RoughCircularButton';
+import RoughCircularButton from '../RoughCircularButton';
+import ArrowIcon from '../ArrowIcon';
+import DeleteIcon from '../DeleteIcon';
+import BottomButtons from './BottomButtons';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const [photoURI, setPhotoURI] = useState<string | null>(null);
@@ -22,15 +25,19 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   return (
     <View style={styles.container}>
       {photoURI ? (
-        <Image source={{ uri: photoURI }} style={StyleSheet.absoluteFill} />
+        <>
+          <Image source={{ uri: photoURI }} style={StyleSheet.absoluteFill} />
+        </>
       ) : device ? (
-        <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} photo={true} ref={cameraRef} />
+        <>
+          <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} photo={true} ref={cameraRef} />
+        </>
       ) : (
         <View style={styles.noDeviceContainer}>
           <Text style={styles.noDeviceText}>No Camera Device Found</Text>
         </View>
       )}
-      <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />
+      {photoURI ? <BottomButtons style={styles.bottom} /> : <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
@@ -43,10 +50,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'pink',
   },
   captureButton: {
     position: 'absolute',
     bottom: 30,
+  },
+  bottom: {
+    position: 'absolute',
+    bottom: 30,
+    left: 0,
+    right: 0,
+    zIndex: 1,
   },
   buttonText: {
     fontSize: 16,
@@ -79,8 +94,10 @@ const styles = StyleSheet.create({
   },
   noDeviceContainer: {
     flex: 1,
+    alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'blue',
   },
   noDeviceText: {
     fontSize: 18,

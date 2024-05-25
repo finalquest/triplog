@@ -27,6 +27,9 @@ const RoughButton: React.FC<RoughButtonProps> = ({ onPress, style, children, tex
     setSize({ width, height });
   };
 
+  //is a child string
+  const isText = typeof children === 'string';
+  console.log('C', children);
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]} onLayout={onLayout}>
       <Svg pointerEvents="none" width={size.width} height={size.height} style={styles.container}>
@@ -37,9 +40,11 @@ const RoughButton: React.FC<RoughButtonProps> = ({ onPress, style, children, tex
           height={size.height - styles.button.padding}
           {...rest}
         />
-        <View style={[styles.content, { height: size.height - styles.content.margin * 2 }]}>
-          <Text style={[styles.font, { color: text.color, fontSize: text.size }]}>{children}</Text>
-        </View>
+        {children && (
+          <View style={[styles.content, { height: size.height - styles.content.margin * 2 }]}>
+            {(isText && <Text style={[styles.font, { color: text.color, fontSize: text.size }]}>{children}</Text>) || children}
+          </View>
+        )}
       </Svg>
     </TouchableOpacity>
   );
