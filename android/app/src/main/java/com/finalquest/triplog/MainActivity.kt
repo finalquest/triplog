@@ -1,4 +1,4 @@
-package com.triplog
+package com.finalquest.triplog
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity

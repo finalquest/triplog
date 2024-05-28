@@ -1,4 +1,4 @@
-package com.triplog
+package com.finalquest.triplog
 
 import android.app.Application
 import com.facebook.react.PackageList
