@@ -2,9 +2,8 @@ import React, { useRef, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Camera, useCameraDevice } from 'react-native-vision-camera'; // Assuming you are using react-native-vision-camera
 import RoughCircularButton from '../RoughCircularButton';
-import ArrowIcon from '../ArrowIcon';
-import DeleteIcon from '../DeleteIcon';
 import BottomButtons from './BottomButtons';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const [photoURI, setPhotoURI] = useState<string | null>(null);
@@ -22,6 +21,16 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
+  const onUpload = () => {
+    CameraRoll.save(photoURI)
+      .then(() => {
+        console.log('Photo saved to camera roll');
+      })
+      .catch(error => {
+        console.log('Error saving photo to camera roll:', error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       {photoURI ? (
@@ -37,7 +46,11 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
           <Text style={styles.noDeviceText}>No Camera Device Found</Text>
         </View>
       )}
-      {photoURI ? <BottomButtons style={styles.bottom} /> : <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />}
+      {photoURI ? (
+        <BottomButtons onUpload={onUpload} style={styles.bottom} />
+      ) : (
+        <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />
+      )}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={styles.closeButtonText}>X</Text>
       </TouchableOpacity>
