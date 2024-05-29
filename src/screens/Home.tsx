@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, LayoutRectangle } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
 import RoughPlusButton from '../components/RoughAddButton';
 import AddModal from '../modals/AddModal';
 import CameraPreview from '../components/camera/Camera';
+import { secretFlagVisibility } from '../model/dbSecrets';
 
 const styles = StyleSheet.create({
   flex: {
@@ -48,6 +50,19 @@ const Home = () => {
   const [buttonPosition, setButtonPosition] = useState<LayoutRectangle | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
+  useEffect(() => {
+    const entitiesCollection = firestore().collection('entities').where(secretFlagVisibility, '==', true);
+    entitiesCollection
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, '=>', doc.data());
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+  }, []);
   const handleButtonPress = (position: LayoutRectangle) => {
     setButtonPosition(position);
   };
@@ -63,6 +78,7 @@ const Home = () => {
           {strings.home_box_title}
         </Text>
       </RoughView>
+
       <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.content}>
         <View style={styles.contentContainer}>
           {showCamera ? (
