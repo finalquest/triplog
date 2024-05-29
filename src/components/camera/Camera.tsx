@@ -31,15 +31,16 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
       });
   };
 
+  const onDelete = () => {
+    setPhotoURI(null);
+  };
+
   return (
     <View style={styles.container}>
-      {photoURI ? (
+      {photoURI && <Image source={{ uri: photoURI }} style={StyleSheet.absoluteFill} />}
+      {device ? (
         <>
-          <Image source={{ uri: photoURI }} style={StyleSheet.absoluteFill} />
-        </>
-      ) : device ? (
-        <>
-          <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} photo={true} ref={cameraRef} />
+          <Camera style={StyleSheet.absoluteFill} device={device} isActive={!photoURI} photo={true} ref={cameraRef} />
         </>
       ) : (
         <View style={styles.noDeviceContainer}>
@@ -47,7 +48,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
         </View>
       )}
       {photoURI ? (
-        <BottomButtons onUpload={onUpload} style={styles.bottom} />
+        <BottomButtons onUpload={onUpload} onDelete={onDelete} style={styles.bottom} />
       ) : (
         <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />
       )}
