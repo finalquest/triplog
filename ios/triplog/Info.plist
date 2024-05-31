@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Permiso para sacar fotitos</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Permiso para ponerle geotag a las fotitos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GochiHand-Regular.ttf</string>

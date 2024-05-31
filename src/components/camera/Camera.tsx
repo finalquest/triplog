@@ -5,6 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import RoughCircularButton from '../RoughCircularButton';
 import BottomButtons from './BottomButtons';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import GetLocation from 'react-native-get-location/dist';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const [photoURI, setPhotoURI] = useState<string | null>(null);
@@ -31,6 +32,10 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
     if (cameraRef.current != null) {
       try {
         const photo = await cameraRef.current.takePhoto();
+        console.log('AAAAAA', photo.metadata?.['{Exif}']);
+        const result = await fetch(`file://${photo.path}`);
+        const data = await result.blob();
+        console.log('BBBB', data);
         setPhotoURI(photo.path);
       } catch (error) {
         console.log('Error taking photo:', error);
@@ -38,9 +43,16 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  const onUpload = () => {
+  const onUpload = async () => {
+    console.log('OOOOO');
+    const location = await GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 2000,
+    });
+    console.log('IIIIII');
     CameraRoll.save(photoURI)
       .then(() => {
+        console.log('LLLLLL', location);
         console.log('Photo saved to camera roll');
       })
       .catch(error => {
@@ -66,6 +78,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
             photo={true}
             ref={cameraRef}
             format={format}
+            enableLocation={true}
           />
         </GestureDetector>
       ) : (
