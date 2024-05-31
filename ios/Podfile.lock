@@ -2350,6 +2350,8 @@ PODS:
     - React-utils (= 0.74.1)
   - ReactNativeGetLocation (4.0.1):
     - React-Core
+  - RNCAsyncStorage (1.23.1):
+    - React-Core
   - RNFBAnalytics (20.0.0):
     - Firebase/Analytics (= 10.25.0)
     - React-Core
@@ -2479,6 +2481,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeGetLocation (from `../node_modules/react-native-get-location`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
@@ -2629,6 +2632,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeGetLocation:
     :path: "../node_modules/react-native-get-location"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBAnalytics:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
@@ -2727,6 +2732,7 @@ SPEC CHECKSUMS:
   React-utils: 8e9c5cd66f0788e156a1fcb5cd69593ec8607611
   ReactCommon: eb4c4a9c43fcc0d93f922d0fdada24638429e515
   ReactNativeGetLocation: b4379a01dff72507d9abce5f4d569b98abef7761
+  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNFBAnalytics: e13f2aed3dffc8901f592279d1b51738a7757d47
   RNFBApp: 87e1cdbf128f8574283d415bc58eac36df546a6f
   RNFBFirestore: 974889969da6539c48d17b1e8f66e4125e3d0211

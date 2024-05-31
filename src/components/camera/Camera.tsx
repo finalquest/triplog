@@ -13,7 +13,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const cameraRef = useRef<Camera>(null);
   const devices = Camera.getAvailableCameraDevices();
   const device = getCameraDevice(devices, 'back', {
-    physicalDevices: ['ultra-wide-angle-camera', 'wide-angle-camera', 'telephoto-camera'],
+    physicalDevices: ['wide-angle-camera', 'telephoto-camera'],
   });
 
   const format = getCameraFormat(device!, [{ photoResolution: 'max' }, { videoResolution: 'max' }, { photoHdr: true }]);

@@ -8,8 +8,13 @@ export interface FirestorePhoto {
   [secretFlagVisibility]: true;
 }
 
-export interface Result {
+export interface Result<T = undefined> {
   error: string | null;
   ok: boolean;
-  data?: unknown;
+  data?: T;
+}
+
+export interface StorageUploadResponse {
+  url?: string;
+  publicUrl: string;
 }
