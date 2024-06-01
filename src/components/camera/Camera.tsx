@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image, Animated } from 'react-native';
 import { Camera, Point, getCameraDevice, getCameraFormat } from 'react-native-vision-camera'; // Assuming you are using react-native-vision-camera
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import RoughCircularButton from '../RoughCircularButton';
@@ -8,8 +8,11 @@ import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import GetLocation from 'react-native-get-location/dist';
 import { saveNewImage } from '../../services/firestore';
 import { saveEntitiy } from '../../services/localStorage';
+import UploadFeedback from './UploadFeedback';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
+  const progressValue = useRef(new Animated.Value(0)).current;
+  const [uploading, setUploading] = useState(false);
   const [photoURI, setPhotoURI] = useState<string | null>(null);
   const cameraRef = useRef<Camera>(null);
   const devices = Camera.getAvailableCameraDevices();
@@ -19,6 +22,14 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
 
   const format = getCameraFormat(device!, [{ photoResolution: 'max' }, { videoResolution: 'max' }, { photoHdr: true }]);
 
+  const onUpadte = useCallback((progress: number) => {
+    console.log('Progress:', progress);
+    Animated.timing(progressValue, {
+      toValue: progress,
+      duration: 500, // Adjust duration as needed
+      useNativeDriver: true,
+    }).start();
+  }, []);
   const focus = useCallback((point: Point) => {
     const c = cameraRef.current;
     if (c != null) {
@@ -43,12 +54,13 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
 
   const onUpload = async () => {
     if (!photoURI) return;
+    setUploading(true);
     const location = await GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 2000,
     });
 
-    const result = await saveNewImage(photoURI, { lat: location.latitude, long: location.longitude });
+    const result = await saveNewImage(photoURI, { lat: location.latitude, long: location.longitude }, onUpadte);
 
     if (!result.ok) return;
 
@@ -61,6 +73,9 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
       .catch(error => {
         console.log('Error saving photo to camera roll:', error);
       });
+    photoURI && setPhotoURI(null);
+    progressValue.setValue(0);
+    setUploading(false);
   };
 
   const onDelete = () => {
@@ -81,16 +96,16 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
             photo={true}
             ref={cameraRef}
             format={format}
-            enableLocation={true}
-          />
+            enableLocation={true}></Camera>
         </GestureDetector>
       ) : (
         <View style={styles.noDeviceContainer}>
           <Text style={styles.noDeviceText}>No Camera Device Found</Text>
         </View>
       )}
+      <UploadFeedback progress={progressValue} />
       {photoURI ? (
-        <BottomButtons onUpload={onUpload} onDelete={onDelete} style={styles.bottom} />
+        !uploading && <BottomButtons onUpload={onUpload} onDelete={onDelete} style={styles.bottom} />
       ) : (
         <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />
       )}

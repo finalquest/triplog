@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, LayoutRectangle } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
 import RoughPlusButton from '../components/RoughAddButton';
 import AddModal from '../modals/AddModal';
 import CameraPreview from '../components/camera/Camera';
 import PreviewEntity from '../components/PreviewEntity';
-import { secretFlagVisibility } from '../model/dbSecrets';
 
 const styles = StyleSheet.create({
   flex: {

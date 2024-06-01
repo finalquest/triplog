@@ -4,9 +4,13 @@ import { PHOTOS_COLLECTION } from '../model/constants';
 import { EntityResponse, FirestorePhoto, Result, StorageUploadData } from '../model/interfaces';
 import { secretFlagVisibility } from '../model/dbSecrets';
 
-export const saveNewImage = async (path: string, location: { long: number; lat: number }): Promise<EntityResponse<StorageUploadData>> => {
+export const saveNewImage = async (
+  path: string,
+  location: { long: number; lat: number },
+  uploadFeedbackCallback: (progress: number) => void
+): Promise<EntityResponse<StorageUploadData>> => {
   try {
-    const uploadImage = await uploadImageToStorage(path);
+    const uploadImage = await uploadImageToStorage(path, uploadFeedbackCallback);
     if (!uploadImage.ok) {
       return { error: uploadImage.error, type: 'photo', ok: false };
     }
@@ -28,13 +32,19 @@ export const saveNewImage = async (path: string, location: { long: number; lat: 
   }
 };
 
-const uploadImageToStorage = async (path: string): Promise<Result<StorageUploadData>> => {
+const uploadImageToStorage = async (path: string, uploadFeeedbackCallback: (progress: number) => void): Promise<Result<StorageUploadData>> => {
   try {
     const fileName = path.split('/').pop();
     const reference = storage().ref(fileName);
-    await reference.putFile(path);
+    const task = reference.putFile(path);
+    task.on('state_changed', taskSnapshot => {
+      const progress = taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
+      console.log(`Uploading image: ${progress}`);
+      uploadFeeedbackCallback(progress); // Call the callback with the progress
+    });
+
+    await task;
     const publicUrl = await reference.getDownloadURL();
-    console.log('File successfully uploaded!');
     return { error: null, ok: true, data: { publicUrl: publicUrl } };
   } catch (error) {
     console.error('Error uploading file: ', error);
