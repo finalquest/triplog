@@ -1,14 +1,14 @@
 import { firebase } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { PHOTOS_COLLECTION } from '../model/constants';
-import { FirestorePhoto, Result, StorageUploadResponse } from '../model/interfaces';
+import { EntityResponse, FirestorePhoto, Result, StorageUploadData } from '../model/interfaces';
 import { secretFlagVisibility } from '../model/dbSecrets';
 
-export const saveNewImage = async (path: string, location: { long: number; lat: number }): Promise<Result<StorageUploadResponse>> => {
+export const saveNewImage = async (path: string, location: { long: number; lat: number }): Promise<EntityResponse<StorageUploadData>> => {
   try {
     const uploadImage = await uploadImageToStorage(path);
     if (!uploadImage.ok) {
-      return uploadImage;
+      return { error: uploadImage.error, type: 'photo', ok: false };
     }
     const db = firebase.firestore();
     const imageToAdd: FirestorePhoto = {
@@ -18,16 +18,24 @@ export const saveNewImage = async (path: string, location: { long: number; lat: 
       long: location.long,
       [secretFlagVisibility]: true,
     };
+    fetch(`${path}/info.json`)
+      .then(response => {
+        console.log('Response:', response);
+      })
+      .catch(error => {
+        console.error('Error fetching image:', error);
+      });
+
     const imagesCollection = db.collection(PHOTOS_COLLECTION);
     await imagesCollection.add(imageToAdd);
-    return { error: null, ok: true, data: { publicUrl: uploadImage.data!.publicUrl, url: path } };
+    return { error: null, ok: true, type: 'photo', data: { publicUrl: uploadImage.data?.publicUrl!, url: path } };
   } catch (error) {
     console.log('Error saving firestore document:', error);
-    return { error: 'Error Saving firestore document', ok: false };
+    return { error: 'Error Saving firestore document', type: 'photo', ok: false };
   }
 };
 
-const uploadImageToStorage = async (path: string): Promise<Result<StorageUploadResponse>> => {
+const uploadImageToStorage = async (path: string): Promise<Result<StorageUploadData>> => {
   try {
     const fileName = path.split('/').pop();
     const reference = storage().ref(fileName);

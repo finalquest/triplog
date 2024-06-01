@@ -14,7 +14,16 @@ export interface Result<T = undefined> {
   data?: T;
 }
 
-export interface StorageUploadResponse {
+export interface StorageUploadData {
   url?: string;
   publicUrl: string;
+}
+
+export type EntityType = 'photo' | 'video' | 'audio' | 'document';
+
+export interface EntityResponse<T> {
+  type: EntityType;
+  data?: T;
+  error: string | null;
+  ok: boolean;
 }

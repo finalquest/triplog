@@ -7,6 +7,7 @@ import BottomButtons from './BottomButtons';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import GetLocation from 'react-native-get-location/dist';
 import { saveNewImage } from '../../services/firestore';
+import { saveEntitiy } from '../../services/localStorage';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const [photoURI, setPhotoURI] = useState<string | null>(null);
@@ -46,7 +47,13 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
       enableHighAccuracy: true,
       timeout: 2000,
     });
+
     const result = await saveNewImage(photoURI, { lat: location.latitude, long: location.longitude });
+
+    if (!result.ok) return;
+
+    saveEntitiy(result);
+
     CameraRoll.save(photoURI)
       .then(() => {
         console.log('Photo saved to camera roll');
