@@ -6,6 +6,7 @@ import strings from '../utils/strings';
 import RoughPlusButton from '../components/RoughAddButton';
 import AddModal from '../modals/AddModal';
 import CameraPreview from '../components/camera/Camera';
+import PreviewEntity from '../components/PreviewEntity';
 import { secretFlagVisibility } from '../model/dbSecrets';
 
 const styles = StyleSheet.create({
@@ -50,19 +51,19 @@ const Home = () => {
   const [buttonPosition, setButtonPosition] = useState<LayoutRectangle | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
-  useEffect(() => {
-    const entitiesCollection = firestore().collection('entities').where(secretFlagVisibility, '==', true);
-    entitiesCollection
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          console.log(doc.id, '=>', doc.data());
-        });
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   const entitiesCollection = firestore().collection('entities').where(secretFlagVisibility, '==', true);
+  //   entitiesCollection
+  //     .get()
+  //     .then(snapshot => {
+  //       snapshot.forEach(doc => {
+  //         console.log(doc.id, '=>', doc.data());
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('Error getting documents', err);
+  //     });
+  // }, []);
   const handleButtonPress = (position: LayoutRectangle) => {
     setButtonPosition(position);
   };
@@ -88,9 +89,7 @@ const Home = () => {
               }}
             />
           ) : (
-            <Text style={styles.font} numberOfLines={4}>
-              {strings.home_last_action}
-            </Text>
+            <PreviewEntity />
           )}
         </View>
         {!showCamera && <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />}

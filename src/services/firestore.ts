@@ -18,13 +18,6 @@ export const saveNewImage = async (path: string, location: { long: number; lat: 
       long: location.long,
       [secretFlagVisibility]: true,
     };
-    fetch(`${path}/info.json`)
-      .then(response => {
-        console.log('Response:', response);
-      })
-      .catch(error => {
-        console.error('Error fetching image:', error);
-      });
 
     const imagesCollection = db.collection(PHOTOS_COLLECTION);
     await imagesCollection.add(imageToAdd);
