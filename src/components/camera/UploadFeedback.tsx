@@ -1,5 +1,6 @@
 import React from 'react';
 import { Animated, LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import RoughView from '../RoughView';
 
 interface UploadFeedbackProps {
   progress: any;
@@ -18,13 +19,18 @@ const UploadFeedback: React.FC<UploadFeedbackProps> = ({ progress }) => {
       style={[
         StyleSheet.absoluteFill,
         {
-          backgroundColor: 'blue',
-          // Bind opacity to animated value
-
           transform: [{ translateY: height / 2 }, { scaleY: progress }, { translateY: -height / 2 }],
         },
-      ]}
-    />
+      ]}>
+      <RoughView
+        fill="gray"
+        fillStyle="zigzag"
+        hachureAngle={90}
+        fillWeight={1}
+        hachureGap={3}
+        roughness={3}
+        style={StyleSheet.absoluteFill}></RoughView>
+    </Animated.View>
   );
 };
 
