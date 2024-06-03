@@ -1,7 +1,7 @@
-import { firebase } from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { PHOTOS_COLLECTION } from '../model/constants';
-import { EntityResponse, FirestorePhoto, Result, StorageUploadData } from '../model/interfaces';
+import { EntityMap, EntityResponse, EntityType, Result, StorageUploadData } from '../model/interfaces';
 import { secretFlagVisibility } from '../model/dbSecrets';
 
 export const saveNewImage = async (
@@ -11,13 +11,15 @@ export const saveNewImage = async (
 ): Promise<EntityResponse<StorageUploadData>> => {
   try {
     const uploadImage = await uploadImageToStorage(path, uploadFeedbackCallback);
-    if (!uploadImage.ok) {
-      return { error: uploadImage.error, type: 'photo', ok: false };
+    if (!uploadImage.ok || !uploadImage.data) {
+      return { error: uploadImage.error, ok: false };
     }
-    const db = firebase.firestore();
-    const imageToAdd: FirestorePhoto = {
-      url: path,
-      createdAt: new Date(),
+    const db = firestore();
+    const entity = { type: 'photo' as EntityType, data: { publicUrl: uploadImage.data.publicUrl, url: path } };
+    const response = { error: null, ok: true, entity: entity };
+    const imageToAdd: EntityMap<StorageUploadData> = {
+      entity: entity,
+      createdAt: firestore.FieldValue.serverTimestamp(),
       lat: location.lat,
       long: location.long,
       [secretFlagVisibility]: true,
@@ -25,10 +27,10 @@ export const saveNewImage = async (
 
     const imagesCollection = db.collection(PHOTOS_COLLECTION);
     await imagesCollection.add(imageToAdd);
-    return { error: null, ok: true, type: 'photo', data: { publicUrl: uploadImage.data?.publicUrl!, url: path } };
+    return response;
   } catch (error) {
     console.log('Error saving firestore document:', error);
-    return { error: 'Error Saving firestore document', type: 'photo', ok: false };
+    return { error: 'Error Saving firestore document', ok: false };
   }
 };
 
@@ -45,9 +47,20 @@ const uploadImageToStorage = async (path: string, uploadFeeedbackCallback: (prog
 
     await task;
     const publicUrl = await reference.getDownloadURL();
-    return { error: null, ok: true, data: { publicUrl: publicUrl } };
+    return { error: null, ok: true, data: { publicUrl: publicUrl, url: '' } };
   } catch (error) {
     console.error('Error uploading file: ', error);
     return { error: 'Error uploading file', ok: false };
+  }
+};
+
+export const getLastEntity = async (): Promise<EntityResponse<unknown> | null> => {
+  try {
+    const entitiesCollection = firestore().collection('entities').where(secretFlagVisibility, '==', true).orderBy('createdAt', 'desc').limit(1);
+    const res = await entitiesCollection.get();
+    return res.docs[0].data() as EntityResponse<unknown>;
+  } catch (error) {
+    console.log('Error getting last entity:', error);
+    return null;
   }
 };
