@@ -12,7 +12,7 @@ interface RoughButtonProps extends TouchableOpacityProps {
   roughness?: number;
   hachureAngle?: number;
   hachureGap?: number;
-  text: {
+  text?: {
     color: string;
     size: number;
   };
@@ -42,7 +42,7 @@ const RoughButton: React.FC<RoughButtonProps> = ({ onPress, style, children, tex
         />
         {children && (
           <View style={[styles.content, { height: size.height - styles.content.margin * 2 }]}>
-            {(isText && <Text style={[styles.font, { color: text.color, fontSize: text.size }]}>{children}</Text>) || children}
+            {(isText && <Text style={[styles.font, { color: text?.color, fontSize: text?.size }]}>{children}</Text>) || children}
           </View>
         )}
       </Svg>

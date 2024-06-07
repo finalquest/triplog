@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getEntity as getLocalEntity } from '../services/localStorage';
 import { EntityResponse, StorageUploadData } from '../model/interfaces';
 import { getLastEntity } from '../services/firestore';
+import ThreeDotsButton from './ThreeDotButton';
 
 const PreviewEntity = () => {
   const [lastEntity, setLastEntity] = useState<{ local: boolean; entity: EntityResponse<unknown> } | null>(null);
@@ -36,7 +37,17 @@ const PreviewEntity = () => {
     Component = <Image style={{ backgroundColor: 'brown', flex: 1, alignSelf: 'stretch' }} source={{ uri: uri }} />;
   }
 
-  return <View style={{ flex: 1, alignSelf: 'stretch', backgroundColor: 'blue' }}>{Component}</View>;
+  return (
+    <View style={{ flex: 1, alignSelf: 'stretch', backgroundColor: 'blue' }}>
+      {Component}
+      <ThreeDotsButton
+        size={35}
+        onPress={() => {
+          console.log('AAAAA');
+        }}
+      />
+    </View>
+  );
 };
 
 export default PreviewEntity;
