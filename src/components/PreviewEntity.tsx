@@ -2,14 +2,21 @@ import React, { useCallback } from 'react';
 import { Image, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getEntity as getLocalEntity } from '../services/localStorage';
-import { EntityResponse, StorageUploadData } from '../model/interfaces';
+import { EntityResponse, PositionRectangle, StorageUploadData } from '../model/interfaces';
 import { getLastEntity } from '../services/firestore';
 import ThreeDotsButton from './ThreeDotButton';
 import CircularLoading from './CircularAnimation';
+import OptionsModal from '../modals/OptionsModal';
 
 const PreviewEntity = () => {
   const [lastEntity, setLastEntity] = useState<{ local: boolean; entity: EntityResponse<unknown> } | null>(null);
+  const [buttonPosition, setButtonPosition] = useState<PositionRectangle | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const handleButtonPress = (position: PositionRectangle) => {
+    setButtonPosition(position);
+  };
+
   useEffect(() => {
     const get = async () => {
       let entity = await getLocalEntity();
@@ -30,9 +37,13 @@ const PreviewEntity = () => {
     get();
   }, []);
 
-  const handleOnLoad = useCallback(a => {
+  const handleOnLoad = useCallback(() => {
     setLoading(false);
   }, []);
+
+  const closeModal = () => {
+    setButtonPosition(null);
+  };
 
   let Component = <View style={{ flex: 1 }} />;
   const entity = lastEntity?.entity.entity;
@@ -43,12 +54,15 @@ const PreviewEntity = () => {
 
   return (
     <View style={{ flex: 1, alignSelf: 'stretch' }}>
-      {<CircularLoading size={150} strokeWidth={10} color="black" duration={1000} arcLength={270} />}
+      {loading && <CircularLoading size={150} strokeWidth={10} color="black" duration={1000} arcLength={270} />}
       {Component}
-      <ThreeDotsButton
-        size={35}
-        onPress={() => {
-          console.log('AAAAA');
+      <ThreeDotsButton size={35} onPress={handleButtonPress} />
+      <OptionsModal
+        visible={!!buttonPosition}
+        position={buttonPosition}
+        onRequestClose={closeModal}
+        onImage={() => {
+          closeModal();
         }}
       />
     </View>

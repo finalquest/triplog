@@ -5,5 +5,6 @@ const strings = {
   home_last_action: 'Aca vas a poder ver la ultima accion que hiciste',
   home_action_add_image: 'Imagen',
   home_action_add_text: 'Nota',
+  preview_action_delete_entity: 'Eliminar',
 };
 export default strings;

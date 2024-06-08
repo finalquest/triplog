@@ -1,6 +1,14 @@
 import { FieldValue } from '@react-native-firebase/firestore';
 import { secretFlagVisibility } from './dbSecrets';
 
+export interface PositionRectangle {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  pageX: number;
+  pageY: number;
+}
 export interface Result<T = undefined> {
   error: string | null;
   ok: boolean;
