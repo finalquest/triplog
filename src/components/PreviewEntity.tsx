@@ -19,7 +19,6 @@ const PreviewEntity = () => {
   };
 
   useEffect(() => {
-    console.log('III');
     const get = async () => {
       let entity = await getLocalEntity();
       if (!entity) {
@@ -34,7 +33,6 @@ const PreviewEntity = () => {
         try {
           const data = entity.entity.data as StorageUploadData;
           await fetch(data.url);
-          console.log('EEEE');
           setLastEntity({ local: true, entity });
         } catch (error) {
           setLastEntity({ local: false, entity });
@@ -54,13 +52,11 @@ const PreviewEntity = () => {
 
   const handleOnDelete = async () => {
     // Delete the entity
-    console.log('AAAAA');
     setLoading(true);
     const res = await deleteEntity(lastEntity?.entity.id!);
     if (res.ok) {
       setRefresh(!refresh);
     } else {
-      console.log('Error deleting entity:', res.error);
       setLoading(false);
     }
 
