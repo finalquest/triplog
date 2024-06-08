@@ -6,5 +6,6 @@ const strings = {
   home_action_add_image: 'Imagen',
   home_action_add_text: 'Nota',
   preview_action_delete_entity: 'Eliminar',
+  preview_no_entities: 'Nada nuevo para ver',
 };
 export default strings;
