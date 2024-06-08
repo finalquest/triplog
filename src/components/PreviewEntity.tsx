@@ -92,7 +92,7 @@ const PreviewEntity = () => {
     <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center' }}>
       {Component}
       {loading && <CircularLoading size={150} strokeWidth={10} color="black" duration={1000} arcLength={270} />}
-      <ThreeDotsButton size={35} onPress={handleButtonPress} />
+      {lastEntity && <ThreeDotsButton size={35} onPress={handleButtonPress} />}
       <OptionsModal visible={!!buttonPosition} position={buttonPosition} onRequestClose={closeModal} onDelete={handleOnDelete} />
     </View>
   );
