@@ -9,13 +9,13 @@ interface OptionsModalProps {
   visible: boolean;
   position: PositionRectangle | null;
   onRequestClose: () => void;
-  onImage: () => void;
+  onDelete: () => void;
 }
 
 const PLUS_BUTTON_SIZE = 60;
 const { width } = Dimensions.get('window');
 
-const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onRequestClose, onImage }) => {
+const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onRequestClose, onDelete }) => {
   if (!position) {
     return null;
   }
@@ -36,7 +36,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onReques
             },
           ]}>
           <RoughButton
-            onPress={onImage}
+            onPress={onDelete}
             style={styles.button}
             fillWeight={3}
             strokeWidth={5}

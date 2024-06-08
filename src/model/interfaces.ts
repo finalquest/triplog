@@ -32,6 +32,7 @@ export interface EntityMap<T> {
   createdAt?: FieldValue;
   lat?: number;
   long?: number;
+  id?: string;
   [secretFlagVisibility]?: true;
 }
 

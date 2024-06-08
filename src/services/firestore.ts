@@ -54,13 +54,32 @@ const uploadImageToStorage = async (path: string, uploadFeeedbackCallback: (prog
   }
 };
 
+export const deleteEntity = async (entityId: string): Promise<Result<null>> => {
+  try {
+    await firestore().collection(PHOTOS_COLLECTION).doc(entityId).delete();
+    return { error: null, ok: true };
+  } catch (error) {
+    console.log('Error deleting entity:', error);
+    return { error: 'Error deleting entity', ok: false };
+  }
+};
+
 export const getLastEntity = async (): Promise<EntityResponse<unknown> | null> => {
   try {
-    const entitiesCollection = firestore().collection('entities').where(secretFlagVisibility, '==', true).orderBy('createdAt', 'desc').limit(1);
+    const entitiesCollection = firestore()
+      .collection(PHOTOS_COLLECTION)
+      .where(secretFlagVisibility, '==', true)
+      .orderBy('createdAt', 'desc')
+      .limit(1);
     const res = await entitiesCollection.get();
-    return res.docs[0].data() as EntityResponse<unknown>;
+    if (res.empty) {
+      return null;
+    }
+    const lastEntity = res.docs[0];
+    const ret = { ...(lastEntity.data() as EntityResponse<unknown>), id: lastEntity.id };
+    return ret;
   } catch (error) {
     console.log('Error getting last entity:', error);
-    return null;
+    return { error: 'Error getting last entity', ok: false };
   }
 };
