@@ -29,7 +29,6 @@ const RoughButton: React.FC<RoughButtonProps> = ({ onPress, style, children, tex
 
   //is a child string
   const isText = typeof children === 'string';
-  console.log('C', children);
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]} onLayout={onLayout}>
       <Svg pointerEvents="none" width={size.width} height={size.height} style={styles.container}>
