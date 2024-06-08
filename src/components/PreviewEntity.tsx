@@ -20,9 +20,11 @@ const PreviewEntity = () => {
 
   useEffect(() => {
     const get = async () => {
-      let entity = await getLocalEntity();
-      if (!entity) {
-        entity = await getLastEntity();
+      const localEntity = await getLocalEntity();
+      const remoteEntity = await getLastEntity();
+      let entity = localEntity;
+      if (localEntity?.id != remoteEntity?.id) {
+        entity = remoteEntity;
       }
       if (!entity) {
         setLoading(false);

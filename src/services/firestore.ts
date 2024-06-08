@@ -26,8 +26,8 @@ export const saveNewImage = async (
     };
 
     const imagesCollection = db.collection(PHOTOS_COLLECTION);
-    await imagesCollection.add(imageToAdd);
-    return response;
+    const saveRes = await imagesCollection.add(imageToAdd);
+    return { ...response, id: saveRes.id };
   } catch (error) {
     console.log('Error saving firestore document:', error);
     return { error: 'Error Saving firestore document', ok: false };
