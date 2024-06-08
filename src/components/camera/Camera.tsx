@@ -17,10 +17,10 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const cameraRef = useRef<Camera>(null);
   const devices = Camera.getAvailableCameraDevices();
   const device = getCameraDevice(devices, 'back', {
-    physicalDevices: ['wide-angle-camera', 'telephoto-camera'],
+    physicalDevices: ['ultra-wide-angle-camera', 'wide-angle-camera'],
   });
 
-  const format = getCameraFormat(device!, [{ photoResolution: 'max' }, { videoResolution: 'max' }, { photoHdr: true }]);
+  const format = getCameraFormat(device!, [{ photoResolution: 'max' }, { videoResolution: 'max' }, { photoHdr: true, videoHdr: false }]);
 
   const onUpadte = useCallback((progress: number) => {
     console.log('Progress:', progress);
@@ -90,13 +90,18 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
           <Camera
             style={StyleSheet.absoluteFill}
             enableZoomGesture={true}
-            photoQualityBalance="quality"
+            photoQualityBalance="speed"
             device={device}
             isActive={!photoURI}
             photo={true}
             ref={cameraRef}
             format={format}
-            enableLocation={true}></Camera>
+            videoHdr={false}
+            photoHdr={true}
+            videoStabilizationMode="off"
+            enableLocation={true}
+            fps={30}
+          />
         </GestureDetector>
       ) : (
         <View style={styles.noDeviceContainer}>
