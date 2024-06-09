@@ -75,3 +75,8 @@ yarn-error.log
 google-services.json
 GoogleService-Info.plist
 dbSecrets.ts
+
+# Expo
+.expo
+dist/
+web-build/
