@@ -1,12 +1,12 @@
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { PHOTOS_COLLECTION } from '../model/constants';
-import { EntityMap, EntityResponse, EntityType, Result, StorageUploadData } from '../model/interfaces';
+import { EntityMap, EntityResponse, EntityType, GeoLocation, Result, StorageUploadData } from '../model/interfaces';
 import { secretFlagVisibility } from '../model/dbSecrets';
 
 export const saveNewImage = async (
   path: string,
-  location: { long: number; lat: number },
+  location: GeoLocation,
   uploadFeedbackCallback: (progress: number) => void
 ): Promise<EntityResponse<StorageUploadData>> => {
   try {
@@ -20,8 +20,7 @@ export const saveNewImage = async (
     const imageToAdd: EntityMap<StorageUploadData> = {
       entity: entity,
       createdAt: firestore.FieldValue.serverTimestamp(),
-      lat: location.lat,
-      long: location.long,
+      geoLocation: location,
       [secretFlagVisibility]: true,
     };
 

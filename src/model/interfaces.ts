@@ -27,12 +27,26 @@ export interface Entity<T> {
   data: T;
 }
 
+export interface HumanReadableLocation {
+  city: string | null;
+  country: string | null;
+  name: string | null;
+  region: string | null;
+  street: string | null;
+  district: string | null;
+}
+
+export interface GeoLocation {
+  lat: number;
+  long: number;
+  humanReadable: HumanReadableLocation | null;
+}
+
 export interface EntityMap<T> {
   entity?: Entity<T>;
   createdAt?: FieldValue;
-  lat?: number;
-  long?: number;
   id?: string;
+  geoLocation?: GeoLocation;
   [secretFlagVisibility]?: true;
 }
 

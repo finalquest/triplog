@@ -5,10 +5,11 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import RoughCircularButton from '../RoughCircularButton';
 import BottomButtons from './BottomButtons';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import GetLocation from 'react-native-get-location/dist';
+import * as Location from 'expo-location';
 import { saveNewImage } from '../../services/firestore';
 import { saveEntitiy } from '../../services/localStorage';
 import UploadFeedback from './UploadFeedback';
+import { HumanReadableLocation } from '../../model/interfaces';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const progressValue = useRef(new Animated.Value(0)).current;
@@ -30,6 +31,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
   const focus = useCallback((point: Point) => {
     const c = cameraRef.current;
     if (c != null) {
@@ -55,12 +57,29 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const onUpload = async () => {
     if (!photoURI) return;
     setUploading(true);
-    const location = await GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 2000,
+    let location = await Location.getCurrentPositionAsync({});
+
+    let geoCode = await Location.reverseGeocodeAsync({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
     });
 
-    const result = await saveNewImage(photoURI, { lat: location.latitude, long: location.longitude }, onUpadte);
+    let humanReadableLocation: HumanReadableLocation | null = null;
+    if (geoCode.length > 0) {
+      humanReadableLocation = {
+        city: geoCode[0].city,
+        country: geoCode[0].country,
+        name: geoCode[0].name,
+        region: geoCode[0].region,
+        street: geoCode[0].street,
+        district: geoCode[0].district,
+      };
+    }
+    const result = await saveNewImage(
+      photoURI,
+      { lat: location.coords.latitude, long: location.coords.longitude, humanReadable: humanReadableLocation },
+      onUpadte
+    );
 
     if (!result.ok) return;
 
