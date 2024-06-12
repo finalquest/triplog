@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { Component, useMemo, useState } from 'react';
 import { StyleSheet, Modal, TouchableOpacity, LayoutRectangle, Dimensions, LayoutChangeEvent } from 'react-native';
 import RoughView from '../components/RoughView';
 import RoughButton from '../components/RoughButton';
 import strings from '../utils/strings';
 import { PositionRectangle } from '../model/interfaces';
+import ConfirmDialog from './ConfirmDialog';
 
 interface OptionsModalProps {
   visible: boolean;
@@ -20,9 +21,9 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onReques
     return null;
   }
 
-  return (
-    <Modal transparent animationType="fade" visible={visible} onRequestClose={onRequestClose}>
-      <TouchableOpacity style={styles.overlay} onPress={onRequestClose}>
+  const options = useMemo(() => {
+    return (
+      <>
         <RoughView
           fillWeight={3}
           strokeWidth={3}
@@ -36,7 +37,9 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onReques
             },
           ]}>
           <RoughButton
-            onPress={onDelete}
+            onPress={() => {
+              setShowConfirm(true);
+            }}
             style={styles.button}
             fillWeight={3}
             strokeWidth={5}
@@ -49,6 +52,32 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onReques
             {strings.preview_action_delete_entity}
           </RoughButton>
         </RoughView>
+      </>
+    );
+  }, []);
+
+  const confirm = useMemo(() => {
+    return (
+      <ConfirmDialog
+        title={strings.preview_action_delete_entity}
+        body={strings.preview_action_delete_confirm_body}
+        onConfirm={() => {
+          onDelete();
+          onRequestClose();
+        }}
+        onCancel={() => {
+          setShowConfirm(false);
+        }}
+        warningColors
+      />
+    );
+  }, []);
+
+  const [showConfirm, setShowConfirm] = useState(false);
+  return (
+    <Modal transparent animationType="fade" visible={visible} onRequestClose={onRequestClose}>
+      <TouchableOpacity style={styles.overlay} onPress={onRequestClose}>
+        {showConfirm ? confirm : options}
       </TouchableOpacity>
     </Modal>
   );
