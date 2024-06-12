@@ -1,9 +1,10 @@
 // RoughButton.tsx
 import React, { useRef, useState } from 'react';
-import { TouchableOpacity, View, StyleSheet, TouchableOpacityProps, Text } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, TouchableOpacityProps } from 'react-native';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 import { PositionRectangle } from '../model/interfaces';
+import Label from './Label';
 
 interface RoughButtonProps extends Omit<TouchableOpacityProps, 'onLayout'> {
   fillWeight?: number;
@@ -50,7 +51,7 @@ const RoughButton: React.FC<RoughButtonProps> = ({ onLayout, onPress, style, chi
         />
         {children && (
           <View style={[styles.content, { height: size.height - styles.content.margin * 2 }]}>
-            {(isText && <Text style={[styles.font, { color: text?.color, fontSize: text?.size }]}>{children}</Text>) || children}
+            {(isText && <Label style={[styles.font, { color: text?.color, fontSize: text?.size }]}>{children}</Label>) || children}
           </View>
         )}
       </Svg>
@@ -65,11 +66,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   font: {
-    fontFamily: 'GochiHand-Regular',
     fontSize: 25,
-    color: 'black',
-    alignSelf: 'stretch',
-    textAlign: 'center',
     textAlignVertical: 'center',
   },
   content: {

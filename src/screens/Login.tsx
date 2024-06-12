@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
 import RoughButton from '../components/RoughButton';
+import Label from '../components/Label';
 
 const styles = StyleSheet.create({
   flex: {
@@ -10,24 +11,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between',
   },
-  font: {
-    fontFamily: 'GochiHand-Regular',
-    fontSize: 25,
-    color: 'black',
-    alignSelf: 'stretch',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    marginVertical: 10,
-  },
+  font: {},
 });
 
 const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.flex}>
       <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={{ alignSelf: 'stretch' }}>
-        <Text style={styles.font} numberOfLines={4}>
+        <Label style={styles.font} numberOfLines={4}>
           {strings.login_box_title}
-        </Text>
+        </Label>
       </RoughView>
       <RoughButton
         onPress={() => navigation.navigate('Home')}

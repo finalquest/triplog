@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Animated } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Animated } from 'react-native';
 import { Camera, Point, getCameraDevice, getCameraFormat } from 'react-native-vision-camera'; // Assuming you are using react-native-vision-camera
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import RoughCircularButton from '../RoughCircularButton';
@@ -10,6 +10,7 @@ import { saveNewImage } from '../../services/firestore';
 import { saveEntitiy } from '../../services/localStorage';
 import UploadFeedback from './UploadFeedback';
 import { HumanReadableLocation } from '../../model/interfaces';
+import Label from '../Label';
 
 const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const progressValue = useRef(new Animated.Value(0)).current;
@@ -124,7 +125,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
         </GestureDetector>
       ) : (
         <View style={styles.noDeviceContainer}>
-          <Text style={styles.noDeviceText}>No Camera Device Found</Text>
+          <Label style={styles.noDeviceText}>No Camera Device Found</Label>
         </View>
       )}
       <UploadFeedback progress={progressValue} />
@@ -134,7 +135,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
         <RoughCircularButton size={80} style={styles.captureButton} onPress={takeSnapshot} />
       )}
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <Text style={styles.closeButtonText}>X</Text>
+        <Label style={styles.closeButtonText}>X</Label>
       </TouchableOpacity>
     </View>
   );
@@ -196,7 +197,6 @@ const styles = StyleSheet.create({
   },
   noDeviceText: {
     fontSize: 18,
-    color: 'black',
   },
 });
 

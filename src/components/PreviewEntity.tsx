@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getEntity as getLocalEntity } from '../services/localStorage';
 import { EntityResponse, PositionRectangle, StorageUploadData } from '../model/interfaces';
@@ -8,6 +8,7 @@ import ThreeDotsButton from './ThreeDotButton';
 import CircularLoading from './CircularAnimation';
 import OptionsModal from '../modals/OptionsModal';
 import strings from '../utils/strings';
+import Label from './Label';
 
 const PreviewEntity = () => {
   const [lastEntity, setLastEntity] = useState<{ local: boolean; entity: EntityResponse<unknown> } | null>(null);
@@ -73,18 +74,13 @@ const PreviewEntity = () => {
     Component = <Image onLoad={handleOnLoad} style={{ flex: 1, alignSelf: 'stretch' }} source={{ uri: uri }} />;
   } else {
     Component = (
-      <Text
+      <Label
         style={{
-          fontFamily: 'GochiHand-Regular',
           fontSize: 50,
-          color: 'black',
-          alignSelf: 'stretch',
-          textAlign: 'center',
-          marginHorizontal: 10,
         }}
         numberOfLines={4}>
         {strings.preview_no_entities}
-      </Text>
+      </Label>
     );
   }
 
