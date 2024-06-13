@@ -9,12 +9,14 @@ import CircularLoading from './CircularAnimation';
 import OptionsModal from '../modals/OptionsModal';
 import strings from '../utils/strings';
 import Label from './Label';
+import MoreInfoModal from '../modals/MoreInfoModal';
 
 const PreviewEntity = () => {
   const [lastEntity, setLastEntity] = useState<{ local: boolean; entity: EntityResponse<unknown> } | null>(null);
   const [refresh, setRefresh] = useState(false);
   const [buttonPosition, setButtonPosition] = useState<PositionRectangle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
 
   const handleButtonPress = (position: PositionRectangle) => {
     setButtonPosition(position);
@@ -50,8 +52,13 @@ const PreviewEntity = () => {
     setLoading(false);
   }, []);
 
-  const closeModal = () => {
+  const closeOptionsModal = () => {
     setButtonPosition(null);
+  };
+
+  const handleMoreInfo = () => {
+    setShowMoreInfo(true);
+    closeOptionsModal();
   };
 
   const handleOnDelete = async () => {
@@ -64,7 +71,7 @@ const PreviewEntity = () => {
       setLoading(false);
     }
 
-    closeModal();
+    closeOptionsModal();
   };
 
   let Component = <View style={{ flex: 1 }} />;
@@ -84,12 +91,26 @@ const PreviewEntity = () => {
     );
   }
 
+  const shouldShowIcons = lastEntity && !loading && !showMoreInfo;
+
   return (
     <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center' }}>
       {Component}
       {loading && <CircularLoading size={150} strokeWidth={10} color="black" duration={1000} arcLength={270} />}
-      {lastEntity && <ThreeDotsButton size={35} onPress={handleButtonPress} />}
-      <OptionsModal visible={!!buttonPosition} position={buttonPosition} onRequestClose={closeModal} onDelete={handleOnDelete} />
+      {shouldShowIcons && <ThreeDotsButton size={35} onPress={handleButtonPress} />}
+      <OptionsModal
+        visible={!!buttonPosition}
+        position={buttonPosition}
+        onRequestClose={closeOptionsModal}
+        onDelete={handleOnDelete}
+        onMoreInfo={handleMoreInfo}
+      />
+      <MoreInfoModal
+        visible={showMoreInfo}
+        onRequestClose={() => {
+          setShowMoreInfo(false);
+        }}
+      />
     </View>
   );
 };

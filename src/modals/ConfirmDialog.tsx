@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
   },
-  button: { alignSelf: 'stretch', height: 65, flex: 1 },
+  button: { alignSelf: 'stretch', height: 80, flex: 1 },
 });
 
 export default ConfirmDialog;

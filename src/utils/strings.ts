@@ -6,6 +6,7 @@ const strings = {
   home_action_add_image: 'Imagen',
   home_action_add_text: 'Nota',
   preview_action_delete_entity: 'Eliminar',
+  preview_action_more_data: 'Mas info',
   preview_no_entities: 'Nada nuevo para ver',
   preview_action_delete_confirm_body: 'Mira que se borra eh. Seguro?',
   button_yes: 'Si',

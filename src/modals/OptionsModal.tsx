@@ -1,5 +1,5 @@
-import React, { Component, useMemo, useState } from 'react';
-import { StyleSheet, Modal, TouchableOpacity, LayoutRectangle, Dimensions, LayoutChangeEvent } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { StyleSheet, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import RoughView from '../components/RoughView';
 import RoughButton from '../components/RoughButton';
 import strings from '../utils/strings';
@@ -11,12 +11,13 @@ interface OptionsModalProps {
   position: PositionRectangle | null;
   onRequestClose: () => void;
   onDelete: () => void;
+  onMoreInfo: () => void;
 }
 
 const PLUS_BUTTON_SIZE = 60;
 const { width } = Dimensions.get('window');
 
-const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onRequestClose, onDelete }) => {
+const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onRequestClose, onDelete, onMoreInfo }) => {
   if (!position) {
     return null;
   }
@@ -50,6 +51,21 @@ const OptionsModal: React.FC<OptionsModalProps> = ({ visible, position, onReques
             fillStyle={'zigzag'}
             text={{ color: 'white', size: 30 }}>
             {strings.preview_action_delete_entity}
+          </RoughButton>
+          <RoughButton
+            onPress={() => {
+              onMoreInfo();
+            }}
+            style={styles.button}
+            fillWeight={3}
+            strokeWidth={5}
+            fill="gray"
+            hachureAngle={50}
+            hachureGap={5}
+            roughness={2}
+            fillStyle={'zigzag'}
+            text={{ color: 'white', size: 30 }}>
+            {strings.preview_action_more_data}
           </RoughButton>
         </RoughView>
       </>
