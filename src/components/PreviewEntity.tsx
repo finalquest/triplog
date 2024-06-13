@@ -110,6 +110,7 @@ const PreviewEntity = () => {
         onRequestClose={() => {
           setShowMoreInfo(false);
         }}
+        entity={lastEntity?.entity}
       />
     </View>
   );
