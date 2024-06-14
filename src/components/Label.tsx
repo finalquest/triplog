@@ -1,9 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextProps } from 'react-native';
 
-interface LabelProps extends TextProps {
-  children: string;
-}
+interface LabelProps extends TextProps {}
 
 const styles = StyleSheet.create({
   font: {
