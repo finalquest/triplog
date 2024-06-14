@@ -1,4 +1,4 @@
-import { FieldValue } from '@react-native-firebase/firestore';
+import { FieldValue, Timestamp } from '@react-native-firebase/firestore';
 import { secretFlagVisibility } from './dbSecrets';
 
 export interface PositionRectangle {
@@ -44,7 +44,7 @@ export interface GeoLocation {
 
 export interface EntityMap<T> {
   entity?: Entity<T>;
-  createdAt?: FieldValue;
+  createdAt?: Timestamp | FieldValue;
   id?: string;
   geoLocation?: GeoLocation;
   [secretFlagVisibility]?: true;
