@@ -1,8 +1,11 @@
 import React from 'react';
-import { StyleSheet, Modal, TouchableOpacity, Dimensions, LayoutChangeEvent, LayoutRectangle } from 'react-native';
+import { StyleSheet, Modal, TouchableOpacity, Dimensions, LayoutChangeEvent, LayoutRectangle, View } from 'react-native';
 import RoughView from '../components/RoughView';
 import MapView, { Marker } from 'react-native-maps';
 import { EntityResponse } from '../model/interfaces';
+import Label from '../components/Label';
+import strings from '../utils/strings';
+import { Timestamp } from '@react-native-firebase/firestore';
 
 interface MoreInfoModalProps {
   onRequestClose: () => void;
@@ -20,7 +23,6 @@ const MoreInfoModal: React.FC<MoreInfoModalProps> = ({ onRequestClose, visible, 
     console.log(event.nativeEvent.layout);
     setPosition(event.nativeEvent.layout);
   };
-  console.log('MoreInfoModal', entity.geoLocation?.lat, entity.geoLocation?.long, entity);
   return (
     <Modal transparent animationType="fade" visible={visible} onRequestClose={onRequestClose}>
       <TouchableOpacity style={styles.overlay} onPress={onRequestClose}></TouchableOpacity>
@@ -41,6 +43,21 @@ const MoreInfoModal: React.FC<MoreInfoModalProps> = ({ onRequestClose, visible, 
           }}>
           <Marker coordinate={{ latitude: entity.geoLocation?.lat!, longitude: entity.geoLocation?.long! }} />
         </MapView>
+        <View style={{ alignSelf: 'stretch' }}>
+          {entity.geoLocation?.humanReadable && (
+            <Label style={{ fontSize: 25, textAlign: 'left' }}>
+              {strings.label_location}
+              <Label style={{ fontSize: 20, color: 'dimgrey' }}>
+                {entity.geoLocation?.humanReadable.city} - {entity.geoLocation.humanReadable.region} - {entity.geoLocation.humanReadable.country} -{' '}
+                {entity.geoLocation.humanReadable.district}
+              </Label>
+            </Label>
+          )}
+          <Label style={{ fontSize: 25, textAlign: 'left' }}>
+            {strings.label_date}
+            <Label style={{ fontSize: 20, color: 'dimgrey' }}>{(entity.createdAt as Timestamp).toDate().toLocaleString()}</Label>
+          </Label>
+        </View>
       </RoughView>
     </Modal>
   );

@@ -11,5 +11,7 @@ const strings = {
   preview_action_delete_confirm_body: 'Mira que se borra eh. Seguro?',
   button_yes: 'Si',
   button_no: 'No',
+  label_location: 'Donde: ',
+  label_date: 'Cuando: ',
 };
 export default strings;
