@@ -20,7 +20,6 @@ const MoreInfoModal: React.FC<MoreInfoModalProps> = ({ onRequestClose, visible, 
   if (!entity) return null;
   const [position, setPosition] = React.useState<LayoutRectangle | null>(null);
   const handleLayout = (event: LayoutChangeEvent) => {
-    console.log(event.nativeEvent.layout);
     setPosition(event.nativeEvent.layout);
   };
   return (
