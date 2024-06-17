@@ -10,12 +10,13 @@ interface AddModalProps {
   position: LayoutRectangle | null;
   onRequestClose: () => void;
   onImage: () => void;
+  onNote: () => void;
 }
 
 const PLUS_BUTTON_SIZE = 80;
 const { width } = Dimensions.get('window');
 
-const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose, onImage }) => {
+const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose, onImage, onNote }) => {
   if (!position) {
     return null;
   }
@@ -42,6 +43,7 @@ const AddModal: React.FC<AddModalProps> = ({ visible, position, onRequestClose, 
             {strings.home_action_add_image}
           </RoughButton>
           <RoughButton
+            onPress={onNote}
             style={styles.button}
             fillWeight={3}
             strokeWidth={5}

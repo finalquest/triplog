@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, LayoutRectangle } from 'react-native';
 import RoughView from '../components/RoughView';
 import strings from '../utils/strings';
@@ -7,6 +7,7 @@ import AddModal from '../modals/AddModal';
 import CameraPreview from '../components/camera/Camera';
 import PreviewEntity from '../components/PreviewEntity';
 import Label from '../components/Label';
+import Note from '../components/note/Note';
 
 const styles = StyleSheet.create({
   flex: {
@@ -40,6 +41,7 @@ const PLUS_BUTTON_SIZE = 80;
 const Home = () => {
   const [buttonPosition, setButtonPosition] = useState<LayoutRectangle | null>(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [showNote, setShowNote] = useState(false);
 
   const handleButtonPress = (position: LayoutRectangle) => {
     setButtonPosition(position);
@@ -49,6 +51,18 @@ const Home = () => {
     setButtonPosition(null);
   };
 
+  const previewComponent = useCallback(() => {
+    if (showCamera) {
+      return <CameraPreview onClose={() => setShowCamera(false)} />;
+    }
+    if (showNote) {
+      return <Note onClose={() => setShowNote(false)} />;
+    }
+    return <PreviewEntity />;
+  }, [showCamera, showNote]);
+
+  const shouldShowPlusButton = !showCamera && !showNote;
+
   return (
     <View style={styles.flex}>
       <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.headerView}>
@@ -56,25 +70,21 @@ const Home = () => {
       </RoughView>
 
       <RoughView fillWeight={3} strokeWidth={3} roughness={3} style={styles.content}>
-        <View style={styles.contentContainer}>
-          {showCamera ? (
-            <CameraPreview
-              onClose={() => {
-                setShowCamera(false);
-              }}
-            />
-          ) : (
-            <PreviewEntity />
-          )}
-        </View>
-        {!showCamera && <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />}
+        <View style={styles.contentContainer}>{previewComponent()}</View>
+        {shouldShowPlusButton && <RoughPlusButton onPress={handleButtonPress} size={PLUS_BUTTON_SIZE} style={styles.plusButton} />}
       </RoughView>
       <AddModal
         visible={!!buttonPosition}
         position={buttonPosition}
         onRequestClose={closeModal}
+        onNote={() => {
+          setShowNote(true);
+          setShowCamera(false);
+          closeModal();
+        }}
         onImage={() => {
           setShowCamera(true);
+          setShowNote(false);
           closeModal();
         }}
       />

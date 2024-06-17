@@ -13,5 +13,7 @@ const strings = {
   button_no: 'No',
   label_location: 'Donde: ',
   label_date: 'Cuando: ',
+  note_add_title: 'Nombre',
+  note_add_body: 'Nota',
 };
 export default strings;

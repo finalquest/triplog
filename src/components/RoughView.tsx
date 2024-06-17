@@ -13,9 +13,10 @@ interface RoughViewProps extends ViewProps {
   hachureAngle?: number;
   hachureGap?: number;
   fillStyle?: 'hachure' | 'solid' | 'zigzag' | 'cross-hatch' | 'dots' | 'sunburst' | 'dashed' | 'zigzag-line';
+  containerViewStyle?: ViewStyle;
 }
 
-const RoughView: React.FC<RoughViewProps> = ({ onLayout, style, children, ...rest }) => {
+const RoughView: React.FC<RoughViewProps> = ({ onLayout, style, children, containerViewStyle, ...rest }) => {
   const [size, setSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
 
   const handleLayout = (event: LayoutChangeEvent) => {
@@ -26,18 +27,15 @@ const RoughView: React.FC<RoughViewProps> = ({ onLayout, style, children, ...res
     }
   };
 
+  const containerStyle = { ...styles.view, ...containerViewStyle };
+  const padding = containerStyle.padding as number;
+
   return (
     <View style={style} onLayout={handleLayout}>
       <Svg pointerEvents="none" width={size.width} height={size.height} style={styles.container}>
-        <Rough.Rectangle
-          x={styles.view.padding / 2}
-          y={styles.view.padding / 2}
-          width={size.width - styles.view.padding}
-          height={size.height - styles.view.padding}
-          {...rest}
-        />
+        <Rough.Rectangle x={padding / 2} y={padding / 2} width={size.width - padding} height={size.height - padding} {...rest} />
       </Svg>
-      <View style={styles.content}>{children}</View>
+      <View style={[styles.content, { padding }]}>{children}</View>
     </View>
   );
 };
