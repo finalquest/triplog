@@ -17,14 +17,16 @@ const { width, height } = Dimensions.get('window');
 const MARGIN = 20;
 
 const MoreInfoModal: React.FC<MoreInfoModalProps> = ({ onRequestClose, visible, entity }) => {
-  if (!entity) return null;
+  if (!entity) {
+    return null;
+  }
   const [position, setPosition] = React.useState<LayoutRectangle | null>(null);
   const handleLayout = (event: LayoutChangeEvent) => {
     setPosition(event.nativeEvent.layout);
   };
   return (
     <Modal transparent animationType="fade" visible={visible} onRequestClose={onRequestClose}>
-      <TouchableOpacity style={styles.overlay} onPress={onRequestClose}></TouchableOpacity>
+      <TouchableOpacity style={styles.overlay} onPress={onRequestClose} />
       <RoughView
         onLayout={handleLayout}
         fillWeight={3}
@@ -54,7 +56,7 @@ const MoreInfoModal: React.FC<MoreInfoModalProps> = ({ onRequestClose, visible, 
           )}
           <Label style={{ fontSize: 25, textAlign: 'left' }}>
             {strings.label_date}
-            <Label style={{ fontSize: 20, color: 'dimgrey' }}>{(entity.createdAt as Timestamp).toDate().toLocaleString()}</Label>
+            {/* <Label style={{ fontSize: 20, color: 'dimgrey' }}>{(entity.createdAt as Timestamp).toDate().toLocaleString()}</Label> */}
           </Label>
         </View>
       </RoughView>

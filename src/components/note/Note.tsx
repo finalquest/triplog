@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, View, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Label from '../Label';
 import strings from '../../utils/strings';
 import RoughView from '../RoughView';
@@ -55,19 +55,24 @@ const styles = StyleSheet.create({
 
 const Note: React.FC<NoteProps> = ({ onClose }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <Label style={styles.closeButtonText}>X</Label>
-      </TouchableOpacity>
-      <Label style={styles.label}>{strings.note_add_title}</Label>
-      <RoughView containerViewStyle={{ padding: 5 }} style={{ alignSelf: 'stretch' }}>
-        <TextInput style={styles.text} />
-      </RoughView>
-      <Label style={styles.label}>{strings.note_add_body}</Label>
-      <RoughView containerViewStyle={{ padding: 5 }} style={{ alignSelf: 'stretch', flex: 1 }}>
-        <TextInput multiline style={styles.body} />
-      </RoughView>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Label style={styles.closeButtonText}>X</Label>
+          </TouchableOpacity>
+        </View>
+
+        <Label style={styles.label}>{strings.note_add_title}</Label>
+        <RoughView containerViewStyle={{ padding: 5 }} style={{ alignSelf: 'stretch' }}>
+          <TextInput style={styles.text} />
+        </RoughView>
+        <Label style={styles.label}>{strings.note_add_body}</Label>
+        <RoughView containerViewStyle={{ padding: 5 }} style={{ alignSelf: 'stretch', flex: 1 }}>
+          <TextInput multiline style={styles.body} />
+        </RoughView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

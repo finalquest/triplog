@@ -35,4 +35,31 @@ export default () => {
   );
 };
 
+if (__DEV__) {
+  const ignoreWarns = ['Warning:', 'Track event:'];
+
+  const warn = console.warn;
+  const err = console.error;
+
+  console.error = (...arg) => {
+    for (const warning of ignoreWarns) {
+      if (arg[0].startsWith(warning)) {
+        return;
+      }
+    }
+    err(...arg);
+  };
+
+  console.warn = (...arg) => {
+    for (const warning of ignoreWarns) {
+      if (arg[0].startsWith(warning)) {
+        return;
+      }
+    }
+    warn(...arg);
+  };
+
+  LogBox.ignoreLogs(ignoreWarns);
+}
+
 LogBox.ignoreAllLogs(true);

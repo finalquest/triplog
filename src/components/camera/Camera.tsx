@@ -19,11 +19,15 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   const cameraRef = useRef<Camera>(null);
   const devices = Camera.getAvailableCameraDevices();
   const device = getCameraDevice(devices, 'back', {
-    physicalDevices: ['ultra-wide-angle-camera', 'wide-angle-camera'],
+    physicalDevices: ['wide-angle-camera'],
   });
 
-  const format = getCameraFormat(device!, [{ photoResolution: 'max' }, { videoResolution: 'max' }, { photoHdr: true, videoHdr: false }]);
-
+  const format = getCameraFormat(device!, [
+    { photoResolution: { width: 6048, height: 8064 } },
+    { videoResolution: 'max' },
+    { photoHdr: false, videoHdr: false },
+  ]);
+  console.log('format', JSON.stringify(format));
   const onUpadte = useCallback((progress: number) => {
     console.log('Progress:', progress);
     Animated.timing(progressValue, {
@@ -56,7 +60,9 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
   };
 
   const onUpload = async () => {
-    if (!photoURI) return;
+    if (!photoURI) {
+      return;
+    }
     setUploading(true);
     let location = await Location.getCurrentPositionAsync({});
 
@@ -82,7 +88,9 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
       onUpadte
     );
 
-    if (!result.ok) return;
+    if (!result.ok) {
+      return;
+    }
 
     saveEntitiy(result);
 
@@ -120,6 +128,7 @@ const CameraPreview = ({ onClose }: { onClose: () => void }) => {
             photoHdr={true}
             videoStabilizationMode="off"
             enableLocation={true}
+            zoom={device.neutralZoom}
             fps={30}
           />
         </GestureDetector>
